@@ -1,0 +1,25 @@
+version: "3"
+
+tasks:
+  deploy:
+    desc: Create pull_request.
+    cmds:
+      - git checkout -b {{.PR_HEAD}}
+      - git commit --allow-empty -m "{{.DESC}}"
+      - git push --set-upstream origin {{.PR_HEAD}}
+      - gh pr create -w -a "@me" --base {{.PR_BASE}} --head {{.PR_HEAD}} --title "{{.DESC}}"
+      - git checkout main
+      - git branch -D {{.PR_HEAD}}
+    vars:
+      CURRENT:
+        sh: git rev-parse --abbrev-ref HEAD
+      SHA:
+        sh: git rev-parse --short HEAD
+      STAGE: '{{default "dev" .STAGE}}'
+      SUBSYSTEM: '{{default "account" .SUBSYSTEM}}'
+      PR_BASE: "release/{{.STAGE}}/{{.SUBSYSTEM}}"
+      PR_HEAD: "deploy/{{.SHA}}/{{.STAGE}}/{{.SUBSYSTEM}}"
+      DESC: "[{{.STAGE}}]Request deploying from main@{{.SHA}} to {{.SUBSYSTEM}}"
+    preconditions:
+      - sh: "[ {{.CURRENT}} = main ]"
+        msg: このタスクは "main" ブランチで実行できます。 "{{.CURRENT}}" では実行できません。

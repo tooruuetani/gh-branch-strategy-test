@@ -1,0 +1,19 @@
+name: deploy_account
+run-name: Deploy account for `${{ github.base_ref }}`
+on:
+  pull_request:
+    branches:
+      - release/*/account
+
+jobs:
+  test:
+    permissions: write-all
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Confirm
+        env:
+          PR_BASE: ${{ github.head_ref }}
+        run: |
+          echo SHA=`echo $PR_BASE | cut -d"/" -f2`
