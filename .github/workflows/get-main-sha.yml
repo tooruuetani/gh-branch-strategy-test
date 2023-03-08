@@ -18,4 +18,4 @@ jobs:
           echo BRANCH=${{ github.head_ref }}
           git fetch origin ${{ github.head_ref }}:${{ github.head_ref }}
           git fetch origin main:main
-          git merge-base main ${{ github.base_ref }}
+          git merge-base main ${{ github.head_ref }}
