@@ -15,6 +15,6 @@ jobs:
       - name: Confirm
         run: |
           echo SHA=${{ github.event.pull_request.head.sha }}
-          echo BRANCH=${{ github.base_ref }}
-          git fetch origin ${{ github.base_ref }}
+          echo BRANCH=${{ github.head_ref }}
+          git fetch origin ${{ github.head_ref }}:${{ github.head_ref }}
           git merge-base main ${{ github.base_ref }}
