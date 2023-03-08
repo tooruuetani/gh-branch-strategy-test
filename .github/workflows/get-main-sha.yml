@@ -12,11 +12,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.pull_request.head_ref }}
       - name: Confirm
         run: |
           echo SHA=${{ github.event.pull_request.head.sha }}
           echo BRANCH=${{ github.base_ref }}
-          git branch --contains
+          git fetch origin ${{ github.base_ref }}
           git merge-base main ${{ github.base_ref }}
