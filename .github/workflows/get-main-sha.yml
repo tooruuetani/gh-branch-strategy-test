@@ -13,9 +13,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Confirm
+        env:
+          PR_BASE: ${{ github.head_ref }}
         run: |
-          echo SHA=${{ github.event.pull_request.head.sha }}
-          echo BRANCH=${{ github.head_ref }}
-          git fetch origin ${{ github.head_ref }}:${{ github.head_ref }}
-          git fetch origin main:main
-          git merge-base main ${{ github.head_ref }}
+          echo SHA=`echo $PR_BASE | cut -d"/" -f2`
